@@ -93,23 +93,23 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str, str]:
     Parses the input data and returns tree and result.
     """
 
-    value = None
+    result = None
     tree = None
     try:
-        value, tree, last_index = expression(token_list, 0)
+        result, tree, last_index = expression(token_list, 0)
         if token_list[last_index][0] != "END":
-            value = None
+            result = None
             tree = None
             raise SyntaxError("Expect END token at index " + str(last_index) + ", got " + str(token_list[last_index]))
     except SyntaxError as e:
         pass
 
-    if value is None:
-        value = "ERROR"
+    if result is None:
+        result = "ERROR"
     if tree is None:
         tree = "ERROR"
     
-    return tree, value
+    return tree, result
 
     
 # 3 @ 5
