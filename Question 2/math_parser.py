@@ -14,11 +14,12 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
         # none value is zero division error handling
         if value is None or right_term is None:
             value = None
+            continue
+        
+        if operator == "+":
+            value += right_term
         else:
-            if operator == "+":
-                value += right_term
-            else:
-                value -= right_term
+            value -= right_term
         
     return value, tree, last_index
 
@@ -37,15 +38,16 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
 
         if value is None or right_factor is None:
             value = None
+            continue
+        
+        if operator == "*":
+            value *= right_factor
         else:
-            if operator == "*":
-                value *= right_factor
+            # divide by zero handling
+            if right_factor == 0:
+                value = None
             else:
-                # divide by zero handling
-                if right_factor == 0:
-                    value = None
-                else:
-                    value /= right_factor
+                value /= right_factor
 
     return value, tree, last_index
 
