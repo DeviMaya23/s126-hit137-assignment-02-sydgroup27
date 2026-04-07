@@ -2,22 +2,41 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
     """
     Returns an expression value, tree and next index.
     """
-
-    value, tree, last_index = factor(token_list, index)
+    value, tree, last_index = term(token_list, index)
 
     # consume all + and - tokens
     while token_list[last_index][0] == "OP" and token_list[last_index][1] in ["+", "-"]:
         operator = token_list[last_index][1]
-        right_factor, right_tree, last_index = factor(token_list, last_index + 1)
+        right_term, right_tree, last_index = term(token_list, last_index + 1)
 
         if operator == "+":
-            value += right_factor
+            value += right_term
         else:
-            value -= right_factor
+            value -= right_term
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
 
     return value, tree, last_index
-    
+
+
+def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
+    """
+    Returns a term value, tree and next index.
+    """
+    # TODO: divide by zero
+    value, tree, last_index = factor(token_list, index)
+
+    # consume all * and / tokens
+    while token_list[last_index][0] == "OP" and token_list[last_index][1] in ["*", "/"]:
+        operator = token_list[last_index][1]
+        right_factor, right_tree, last_index = factor(token_list, last_index + 1)
+
+        if operator == "*":
+            value *= right_factor
+        else:
+            value /= right_factor
+        tree = "(" + operator + " " + tree + " " + right_tree + ")"
+
+    return value, tree, last_index
 
 
 def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
@@ -50,11 +69,15 @@ def parse():
     """
 
     # --3 + 3 + -4
-    dummy = [("OP", "-"), ("OP", "-"), ("NUM", "3"), ("OP", "+"), ("NUM", "3"), ("OP", "+"), ("OP", "-"), ("NUM", "4"), ("END", None)]
+    # dummy = [("OP", "-"), ("OP", "-"), ("NUM", "3"), ("OP", "+"), ("NUM", "3"), ("OP", "+"), ("OP", "-"), ("NUM", "4"), ("END", None)]
     # dummy = [("OP", "-"),("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("NUM", "3"),("END", None)]
     # dummy = [("NUM", "0"),("END", None)]
+
+    # dummy = [("NUM", "24"), ("OP", "/"), ("NUM", "2"), ("OP", "/"), ("NUM", "3"), ("OP", "/"), ("NUM", "2"), ("END", None)]
+
+    dummy = [("END", None)]
 
     value = None
     tree = None
