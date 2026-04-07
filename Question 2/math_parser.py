@@ -9,12 +9,17 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
         operator = token_list[last_index][1]
         right_term, right_tree, last_index = term(token_list, last_index + 1)
 
-        if operator == "+":
-            value += right_term
-        else:
-            value -= right_term
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
 
+        # none value is zero division error handling
+        if value is None or right_term is None:
+            value = None
+        else:
+            if operator == "+":
+                value += right_term
+            else:
+                value -= right_term
+        
     return value, tree, last_index
 
 
@@ -22,19 +27,25 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
     """
     Returns a term value, tree and next index.
     """
-    # TODO: divide by zero
     value, tree, last_index = factor(token_list, index)
 
     # consume all * and / tokens
     while token_list[last_index][0] == "OP" and token_list[last_index][1] in ["*", "/"]:
         operator = token_list[last_index][1]
         right_factor, right_tree, last_index = factor(token_list, last_index + 1)
-
-        if operator == "*":
-            value *= right_factor
-        else:
-            value /= right_factor
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
+
+        if value is None or right_factor is None:
+            value = None
+        else:
+            if operator == "*":
+                value *= right_factor
+            else:
+                # divide by zero handling
+                if right_factor == 0:
+                    value = None
+                else:
+                    value /= right_factor
 
     return value, tree, last_index
 
@@ -68,17 +79,7 @@ def parse():
     Parses the input data and returns tree and result.
     """
 
-    # --3 + 3 + -4
-    # dummy = [("OP", "-"), ("OP", "-"), ("NUM", "3"), ("OP", "+"), ("NUM", "3"), ("OP", "+"), ("OP", "-"), ("NUM", "4"), ("END", None)]
-    # dummy = [("OP", "-"),("OP", "-"),("NUM", "3"),("END", None)]
-    # dummy = [("OP", "-"),("NUM", "3"),("END", None)]
-    # dummy = [("NUM", "3"),("END", None)]
-    # dummy = [("NUM", "0"),("END", None)]
-
-    # dummy = [("NUM", "24"), ("OP", "/"), ("NUM", "2"), ("OP", "/"), ("NUM", "3"), ("OP", "/"), ("NUM", "2"), ("END", None)]
-
-    dummy = [("END", None)]
-
+    dummy = [("NUM", "10"), ("OP", "/"), ("NUM", "0"),  ("OP", "/"), ("NUM", "0"), ("OP", "/"), ("NUM", "0"),  ("OP", "/"), ("NUM", "0"), ("END", None)]
     value = None
     tree = None
     try:
@@ -88,6 +89,8 @@ def parse():
         
     except SyntaxError as e:
         print("Syntax Error:", e)
+    except ZeroDivisionError as e:
+        print("Math Error:", e)
 
     if value is None:
         value = "ERROR"
