@@ -31,15 +31,25 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
     value, tree, last_index = factor(token_list, index)
 
     # consume all * and / tokens
-    while token_list[last_index][0] == "OP" and token_list[last_index][1] in ["*", "/"]:
-        operator = token_list[last_index][1]
-        right_factor, right_tree, last_index = factor(token_list, last_index + 1)
+    while (
+        (token_list[last_index][0] == "OP" and token_list[last_index][1] in ["*", "/"])
+        or token_list[last_index][0] == "LPAREN"
+    ):
+        # for implicit multiplication
+        if token_list[last_index][0] == "LPAREN":
+            operator = "*"
+            factor_index = last_index
+        else:
+            operator = token_list[last_index][1]
+            factor_index = last_index + 1
+
+        right_factor, right_tree, last_index = factor(token_list, factor_index)
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
 
         if value is None or right_factor is None:
             value = None
             continue
-        
+
         if operator == "*":
             value *= right_factor
         else:
@@ -81,7 +91,8 @@ def parse():
     Parses the input data and returns tree and result.
     """
 
-    dummy = [("NUM", "10"), ("OP", "/"), ("NUM", "0"),  ("OP", "/"), ("NUM", "0"), ("OP", "/"), ("NUM", "0"),  ("OP", "/"), ("NUM", "0"), ("END", None)]
+    dummy = [("NUM", "2"), ("LPAREN", "("), ("NUM", "3"), ("RPAREN", ")"), ("LPAREN", "("), ("NUM", "4"), ("RPAREN", ")"), ("END", None)]
+
     value = None
     tree = None
     try:
