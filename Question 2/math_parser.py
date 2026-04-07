@@ -2,7 +2,6 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
     """
     Returns an expression value, tree and next index.
     """
-    # TODO: parentheses logic unimplemented
 
     value, tree, last_index = factor(token_list, index)
 
@@ -16,12 +15,9 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
         else:
             value -= right_factor
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
+
+    return value, tree, last_index
     
-    # check for END token
-    if token_list[last_index][0] == "END":
-        return value, tree, last_index
-    
-    raise SyntaxError("Unexpected token: " + str(token_list[last_index]))
 
 
 def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
@@ -29,6 +25,13 @@ def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int
     Returns a factor value, tree and next index.
     """
     token = token_list[index]
+
+    # for parentheses expression
+    if token[0] == "LPAREN":
+        value, tree, last_index = expression(token_list, index + 1)
+        if token_list[last_index][0] != "RPAREN":
+            raise SyntaxError("Expected RPAREN token at index " + str(last_index) + ", got " + str(token_list[last_index]))
+        return value, tree, last_index + 1
 
     # for negative unary
     if token[0] == "OP" and token[1] == "-":
@@ -47,13 +50,11 @@ def parse():
     """
 
     # --3 + 3 + -4
-    # dummy = [("OP", "-"), ("OP", "-"), ("NUM", "3"), ("OP", "+"), ("NUM", "3"), ("OP", "+"), ("OP", "-"), ("NUM", "4"), ("END", None)]
+    dummy = [("OP", "-"), ("OP", "-"), ("NUM", "3"), ("OP", "+"), ("NUM", "3"), ("OP", "+"), ("OP", "-"), ("NUM", "4"), ("END", None)]
     # dummy = [("OP", "-"),("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("NUM", "3"),("END", None)]
     # dummy = [("NUM", "0"),("END", None)]
-
-    dummy = [("OP", "-"), ("NUM", "10"), ("OP", "+"), ("NUM", "5"), ("OP", "-"), ("NUM", "2"), ("END", None)]
 
     value = None
     tree = None
