@@ -1,25 +1,26 @@
-def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, int, str]:
+def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
     """
     Returns an expression value and next index.
     """
 
-    result, last_index, tree = factor(token_list, index)
+    result, tree, last_index = factor(token_list, index)
 
-    return result, last_index, tree
+    return result, tree, last_index
 
-def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, int, str]:
+def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
     """
     Returns a factor value and next index.
     """
     token = token_list[index]
 
+    # for negative unary
     if token[0] == "OP" and token[1] == "-":
-        value, new_index, operand_tree = factor(token_list, index + 1)
-        return -value, new_index, "(neg " + operand_tree + ")"
+        value, operand_tree, new_index = factor(token_list, index + 1)
+        return -value, "(neg " + operand_tree + ")", new_index
 
     if token[0] == "NUM":
-        return float(token[1]), index + 1, str(token[1])
-    
+        return float(token[1]), token[1], index + 1
+
     raise SyntaxError("Unexpected token: " + str(token))
 
 
@@ -28,13 +29,15 @@ def parse():
     Parses the input data and returns tree and result.
     """
 
-    dummy = [("OP", "-"),("OP", "-"),("OP", "-"),("NUM", "3"),("END", None)]
+    dummy = [("OP", "-"),("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("OP", "-"),("NUM", "3"),("END", None)]
     # dummy = [("NUM", "3"),("END", None)]
+    # dummy = [("NUM", "0"),("END", None)]
 
     value = None
+    tree = None
     try:
-        value, last_index, tree = expression(dummy, 0)
+        value, tree, last_index = expression(dummy, 0)
         if dummy[last_index][0] != "END":
             raise SyntaxError("Expect END token at index " + str(last_index) + ", got " + str(dummy[last_index]))
         
@@ -42,10 +45,12 @@ def parse():
         print("Syntax Error:", e)
 
     if value is None:
-        print("No result")
-    else:
-        print("Result:", value)
-        print("Tree:", tree)
+        value = "ERROR"
+    if tree is None:
+        tree = "ERROR"
+
+    print("Result:", value)
+    print("Tree:", tree)
     
 
 parse()
