@@ -13,8 +13,12 @@ def evaluate_file(input_path: str) -> list[dict]:
     # TODO: instead of looping dummy_tokenise, this should be done in read line loop, after tokenise is run
     for line in dummy_tokenise():
         tree, result = parse(line)
-        results.append({"input": "dummyinput", "token": "dummytoken", # TODO: input and token should come from tokeniser
-            "tree": tree, "result": result}) 
+
+        results.append({
+            "input": "dummyinput", # TODO: from read line loop
+            "token": "dummytoken", # TODO: from tokenise function, maybe a new function to properly format
+            "tree": "ERROR" if tree is None else tree, 
+            "result": "ERROR" if result is None else result}) 
         
     # TODO: write result into output.txt, located in the same directory as input_path
 
@@ -27,5 +31,3 @@ def dummy_tokenise():
     example3 = [("NUM", "3"), ("OP", "/"), ("NUM", "0"), ("END", None)]
     return [example1, example2, example3]
 
-
-print(evaluate_file("notafile"))
