@@ -1,11 +1,19 @@
-def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
+import constants
+
+def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
     """
-    Returns an expression value, tree and next index.
+    Reads token list and returns an expression value, tree and next index.
+
+    Args:
+        token_list: list of tokens from tokeniser
+        index: current index of token list
+    Returns:
+        A tuple of (value, tree, next_index). Value is None for errors.
     """
     value, tree, last_index = term(token_list, index)
 
     # consume all + and - tokens
-    while token_list[last_index][0] == "OP" and token_list[last_index][1] in ["+", "-"]:
+    while token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["+", "-"]:
         operator = token_list[last_index][1]
         right_term, right_tree, last_index = term(token_list, last_index + 1)
 
@@ -24,19 +32,25 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float, str,
     return value, tree, last_index
 
 
-def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
+def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
     """
-    Returns a term value, tree and next index.
+    Reads token list and returns a term value, tree and next index.
+
+    Args:
+        token_list: list of tokens from tokeniser
+        index: current index of token list
+    Returns:
+        A tuple of (value, tree, next_index). Value is None for errors.
     """
     value, tree, last_index = factor(token_list, index)
 
     # consume all * and / tokens
     while (
-        (token_list[last_index][0] == "OP" and token_list[last_index][1] in ["*", "/"])
-        or token_list[last_index][0] == "LPAREN"
+        ((token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["*", "/"])
+        or token_list[last_index][0] == constants.LPAREN)
     ):
         # for implicit multiplication
-        if token_list[last_index][0] == "LPAREN":
+        if token_list[last_index][0] == constants.LPAREN:
             operator = "*"
             factor_index = last_index
         else:
@@ -62,45 +76,55 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
     return value, tree, last_index
 
 
-def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float, str, int]:
+def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
     """
-    Returns a factor value, tree and next index.
+    Reads token list and returns a factor value, tree and next index.
+
+    Args:
+        token_list: list of tokens from tokeniser
+        index: current index of token list
+    Returns:
+        A tuple of (value, tree, next_index). Value is None for errors.
     """
     token = token_list[index]
 
     # for parentheses expression
-    if token[0] == "LPAREN":
+    if token[0] == constants.LPAREN:
         value, tree, last_index = expression(token_list, index + 1)
-        if token_list[last_index][0] != "RPAREN":
-            raise SyntaxError("Expected RPAREN token at index " + str(last_index) + ", got " + str(token_list[last_index]))
+        if token_list[last_index][0] != constants.RPAREN:
+                raise SyntaxError(f"Expected RPAREN token at index {last_index}, got {token_list[last_index]}")
         return value, tree, last_index + 1
 
     # for negative unary
-    if token[0] == "OP" and token[1] == "-":
+    if token[0] == constants.OP and token[1] == "-":
         value, operand_tree, new_index = factor(token_list, index + 1)
         if value is not None:
             value = -value
         return value, "(neg " + operand_tree + ")", new_index
 
-    if token[0] == "NUM":
+    if token[0] == constants.NUM:
         return float(token[1]), token[1], index + 1
 
-    raise SyntaxError("Unexpected token: " + str(token))
+    raise SyntaxError(f"Unexpected token: {token}")
 
 
-def parse(token_list:list[tuple[str, str]]) -> tuple[str, str]:
+def parse(token_list:list[tuple[str, str]]) -> tuple[str, float | str]:
     """
     Parses the input data and returns tree and result.
+    
+    Args:
+        token_list: List produced by the tokeniser. Must end with END token.
+    Returns:
+        A tuple of (tree, result). Values can be "ERROR".
     """
-
     result = None
     tree = None
     try:
         result, tree, last_index = expression(token_list, 0)
-        if token_list[last_index][0] != "END":
+        if token_list[last_index][0] != constants.END:
             result = None
             tree = None
-            raise SyntaxError("Expect END token at index " + str(last_index) + ", got " + str(token_list[last_index]))
+            raise SyntaxError(f"Expected END token at index {last_index}, got {token_list[last_index]}")
     except SyntaxError as e:
         pass
 
@@ -111,7 +135,3 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str, str]:
     
     return tree, result
 
-    
-# 3 @ 5
-dummy = [("NUM", "3"), ("WRONG", "@"), ("NUM", "5"), ("END", None)]
-parse(dummy)
