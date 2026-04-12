@@ -108,14 +108,14 @@ def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, s
     raise SyntaxError(f"Unexpected token: {token}")
 
 
-def parse(token_list:list[tuple[str, str]]) -> tuple[str, float | str]:
+def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
     """
     Parses the input data and returns tree and result.
     
     Args:
         token_list: List produced by the tokeniser. Must end with END token.
     Returns:
-        A tuple of (tree, result). Values can be "ERROR".
+        A tuple of (tree, result). Values are None for errors.
     """
     result = None
     tree = None
@@ -127,11 +127,6 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str, float | str]:
             raise SyntaxError(f"Expected END token at index {last_index}, got {token_list[last_index]}")
     except SyntaxError as e:
         pass
-
-    if result is None:
-        result = "ERROR"
-    if tree is None:
-        tree = "ERROR"
     
     return tree, result
 
