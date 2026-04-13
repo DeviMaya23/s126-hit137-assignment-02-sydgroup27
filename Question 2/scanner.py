@@ -1,5 +1,5 @@
 import constants
-def tokenise(input_line:str) -> list[tuple[str, str]]:
+def tokenise(input_line:str) -> list[tuple[str, str]] | None:
     """
     Scans the input data and returns a list of tokens.
     Args:
@@ -9,17 +9,15 @@ def tokenise(input_line:str) -> list[tuple[str, str]]:
     [(token_type, token_value), ...]
     If it's an empty line, return None.
     """
-    # Implementation of the scanner goes here
     
     if not input_line.strip():
         return None
     
     tokens = []
     i = 0
-    s = input_line
- 
-    while i < len(s):
-        ch = s[i]
+
+    while i < len(input_line):
+        ch = input_line[i]
  
         # Skip whitespace
         if ch.isspace():
