@@ -24,19 +24,20 @@ def encrypt_character(char, shift1, shift2):
 
     return char
 
+def encrypt_file(shift1, shift2):
 
+    with open("raw_text.txt", "r") as file:
+        content = file.read()
 
-def encrypt_file():
-    pass
+    encrypted = ""
 
+    for char in content:
+        encrypted += encrypt_character(char, shift1, shift2)
 
-def decrypt_file():
-    pass
+    with open("encrypted_text.txt", "w") as file:
+        file.write(encrypted)
 
-
-def verify_files():
-    pass
-
+    print("Encryption completed")
 
 def main():
     pass
