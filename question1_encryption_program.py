@@ -61,3 +61,18 @@ def decrypt_character(char, shift1, shift2):
             return chr((ord(char) - ord('A') - shift) % 26 + ord('A'))
 
     return char
+# Encryption Function
+def encrypt_file(shift1, shift2):
+
+    with open("raw_text.txt", "r") as file:
+        content = file.read()
+
+    encrypted_text = ""
+
+    for char in content:
+        encrypted_text += encrypt_character(char, shift1, shift2)
+
+    with open("encrypted_text.txt", "w") as file:
+        file.write(encrypted_text)
+
+    print("Encryption completed successfully")
