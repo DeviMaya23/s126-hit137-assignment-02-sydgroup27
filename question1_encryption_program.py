@@ -47,3 +47,17 @@ def decrypt_character(char, shift1, shift2):
         elif 'n' <= char <= 'z':
             shift = shift1 + shift2
             return chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+        # Uppercase letters
+    elif char.isupper():
+        
+        # First half (A-M)
+        if 'A' <= char <= 'M':
+            shift = shift1
+            return chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+        
+        # Second half (N-Z)
+        elif 'N' <= char <= 'Z':
+            shift = shift2 ** 2
+            return chr((ord(char) - ord('A') - shift) % 26 + ord('A'))
+
+    return char
