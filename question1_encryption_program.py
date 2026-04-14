@@ -1,50 +1,34 @@
 # HIT137 Assignment 2 - Question 1
-# Encryption and Decryption Program
+#Author: Susmita Sharma
+
+#Function to encrypt a single character
 def encrypt_character(char, shift1, shift2):
-
+    
+    # Lowercase letters
     if char.islower():
-
+        
+        # First half (a-m)
         if 'a' <= char <= 'm':
             shift = shift1 * shift2
             return chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
-
-        else:
+        
+        # Second half (n-z)
+        elif 'n' <= char <= 'z':
             shift = shift1 + shift2
             return chr((ord(char) - ord('a') - shift) % 26 + ord('a'))
 
+    # Uppercase letters
     elif char.isupper():
-
+        
+        # First half (A-M)
         if 'A' <= char <= 'M':
             shift = shift1
             return chr((ord(char) - ord('A') - shift) % 26 + ord('A'))
-
-        else:
+        
+        # Second half (N-Z)
+        elif 'N' <= char <= 'Z':
             shift = shift2 ** 2
             return chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
 
+    # Other characters remain unchanged
     return char
-def encrypt_file(shift1, shift2):
-
-    # Open the input file in read mode
-    with open("raw_text.txt", "r") as file:
-        content = file.read()
-
-    encrypted = ""
-
-    # Loop through each character and encrypt it
-    for char in content:
-        encrypted += encrypt_character(char, shift1, shift2)
-
-    # Write the encrypted text to output file
-    with open("encrypted_text.txt", "w") as file:
-        file.write(encrypted)
-
-    # Display confirmation message after encryption is done
-    print("Encryption completed")
-
-
-
-
-if __name__ == "__main__":
-    main()
-
