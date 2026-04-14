@@ -39,8 +39,7 @@ def encrypt_file(shift1, shift2):
 
     print("Encryption completed")
 
-def main():
-    pass
+
 
 
 if __name__ == "__main__":
