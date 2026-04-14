@@ -76,3 +76,19 @@ def encrypt_file(shift1, shift2):
         file.write(encrypted_text)
 
     print("Encryption completed successfully")
+    
+    # Decryption Function
+def decrypt_file(shift1, shift2):
+
+    with open("encrypted_text.txt", "r") as file:
+        content = file.read()
+
+    decrypted_text = ""
+
+    for char in content:
+        decrypted_text += decrypt_character(char, shift1, shift2)
+
+    with open("decrypted_text.txt", "w") as file:
+        file.write(decrypted_text)
+
+    print("Decryption completed successfully")
