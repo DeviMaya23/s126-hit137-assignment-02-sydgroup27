@@ -28,11 +28,11 @@ def tokenise(input_line:str) -> list[tuple[str, str]] | None:
             continue
  
         # Numeric literal — collect all consecutive digit/dot characters
-        if ch.isdigit() or (ch == '.' and i + 1 < len(s) and s[i + 1].isdigit()):
+        if ch.isdigit() or (ch == '.' and i + 1 < len(input_line) and input_line[i + 1].isdigit()):
             j = i
-            while j < len(s) and (s[j].isdigit() or s[j] == '.'):
+            while j < len(input_line) and (input_line[j].isdigit() or input_line[j] == '.'):
                 j += 1
-            num_str = s[i:j]
+            num_str = input_line[i:j]
             if num_str.count('.') > 1:
                 raise ValueError(f"Invalid number literal: {num_str!r}")
             tokens.append((constants.NUM, num_str))
