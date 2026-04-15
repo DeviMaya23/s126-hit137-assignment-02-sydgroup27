@@ -12,12 +12,19 @@ def main():
             continue
         try:
             result = evaluate_file(input_path)
+            if not result:
+                print("Input file is empty. No results to write.")
+                print("Program exiting.")
+                break
             print("Result:")
             print(result)
             print("Evaluation complete. Results written to output.txt")
             break
         except FileNotFoundError:
-            print(f"File not found: {input_path}. Please try again.")
+            print(f"File not found: {input_path}. Please check the path and try again.")
+        except UnicodeDecodeError:
+            print(f"File encoding error: {input_path}. File must be a valid text file.")
+            break
         except OSError as e:
             print(f"File error: {e}")
             break
