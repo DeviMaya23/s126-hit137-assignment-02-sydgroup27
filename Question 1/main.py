@@ -2,13 +2,18 @@
 from encryption import encrypt
 from decryption import decrypt
 from compare import compare
-# Operations for the input of the shift value and content of the file.
-
+def get_shift(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+            return value
+        except ValueError:
+            print("Invalid input! Please enter a number only.")
 def main():
     try:
         # Givin the shif value to shift the data 
-        shift1 = int(input("Enter the first shift value: "))
-        shift2 = int(input("Enter  the second shift value: "))
+        shift1 = get_shift("Enter shift1 value:")
+        shift2 = get_shift("Enter shift2 value:")
 
 
         # creating the  file and inserting the text in the file 
