@@ -11,6 +11,9 @@ def tokenise(input_line:str) -> list[tuple[str, str]] | None:
     Return:
     [(token_type, token_value), ...]
     If it's an empty line, return None.
+    
+    Raises:
+    ValueError: if an unexpected character is encountered or if a number literal is invalid.
     """
     
     if not input_line.strip():

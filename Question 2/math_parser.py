@@ -12,14 +12,15 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | Non
     """
     value, tree, last_index = term(token_list, index)
 
-    # consume all + and - tokens
+    # Consume all + and - tokens
     while token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["+", "-"]:
         operator = token_list[last_index][1]
         right_term, right_tree, last_index = term(token_list, last_index + 1)
 
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
 
-        # none value is zero division error handling
+        # None value comes only from zero division error handling in term
+        # Value calculation is only done for not None values
         if value is None or right_term is None:
             value = None
             continue
@@ -44,12 +45,12 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str
     """
     value, tree, last_index = factor(token_list, index)
 
-    # consume all * and / tokens
+    # Consume all * and / tokens
     while (
         ((token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["*", "/"])
         or token_list[last_index][0] == constants.LPAREN)
     ):
-        # for implicit multiplication
+        # For implicit multiplication
         if token_list[last_index][0] == constants.LPAREN:
             operator = "*"
             factor_index = last_index
@@ -60,6 +61,7 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str
         right_factor, right_tree, last_index = factor(token_list, factor_index)
         tree = "(" + operator + " " + tree + " " + right_tree + ")"
 
+        # Divide by zero check
         if value is None or right_factor is None:
             value = None
             continue
@@ -67,7 +69,7 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str
         if operator == "*":
             value *= right_factor
         else:
-            # divide by zero handling
+            # Divide by zero handling
             if right_factor == 0:
                 value = None
             else:
@@ -88,14 +90,14 @@ def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, s
     """
     token = token_list[index]
 
-    # for parentheses expression
+    # For parentheses expression
     if token[0] == constants.LPAREN:
         value, tree, last_index = expression(token_list, index + 1)
         if token_list[last_index][0] != constants.RPAREN:
                 raise SyntaxError(f"Expected RPAREN token at index {last_index}, got {token_list[last_index]}")
         return value, tree, last_index + 1
 
-    # for negative unary
+    # For negative unary
     if token[0] == constants.OP and token[1] == "-":
         value, operand_tree, new_index = factor(token_list, index + 1)
         if value is not None:
@@ -125,7 +127,8 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
             result = None
             tree = None
             raise SyntaxError(f"Expected END token at index {last_index}, got {token_list[last_index]}")
-    except SyntaxError as e:
+    except SyntaxError:
+        # SyntaxError is raised for unexpected tokens. Return default values which is None.
         pass
     
     return tree, result

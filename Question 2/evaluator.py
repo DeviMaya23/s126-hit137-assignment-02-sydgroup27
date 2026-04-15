@@ -5,6 +5,12 @@ from pathlib import Path
 def evaluate_file(input_path: str) -> list[dict]:
     """
     Evaluates the input file and returns a list of results.
+    It also writes the results to output.txt, saved in the same directory as input file.
+
+    Args:
+        input_path: path of the input file
+    Returns:
+        A list of dictionaries containing input, tokens, tree and result for each line in the input
     """
     results = []
 
@@ -15,6 +21,7 @@ def evaluate_file(input_path: str) -> list[dict]:
             try:
                 tokens = tokenise(line)
             except ValueError:
+                # Skip parsing, append error result
                 results.append({
                     "input": line.rstrip('\n'),
                     "token": "ERROR",
@@ -30,6 +37,10 @@ def evaluate_file(input_path: str) -> list[dict]:
                 "token": tokens,
                 "tree": "ERROR" if tree is None else tree,
                 "result": "ERROR" if result is None else result})
+            
+    # For empty file, skip writing to output.txt
+    if not results:
+        return results
 
     # Write resuls to output.txt 
     output_path = Path(input_path).with_name("output.txt")
