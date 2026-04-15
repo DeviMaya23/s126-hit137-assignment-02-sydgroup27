@@ -20,4 +20,3 @@ def compare(raw_file, decrypt_file):
             print("File differs.")
     except FileNotFoundError as e:
         print(f"Error: {e}")
-)
