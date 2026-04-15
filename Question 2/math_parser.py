@@ -1,4 +1,5 @@
 import constants
+import math
 
 def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
     """
@@ -131,5 +132,10 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
         # SyntaxError is raised for unexpected tokens. Return default values which is None.
         pass
     
+    # For potential overflow/nan cases
+    if result is not None and not math.isfinite(result):
+        print("Result is too large to calculate for token set: ", token_list)
+        result = None
+
     return tree, result
 
