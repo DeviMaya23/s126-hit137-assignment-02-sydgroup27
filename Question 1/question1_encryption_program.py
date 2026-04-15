@@ -92,6 +92,24 @@ def decrypt_file(shift1, shift2):
         file.write(decrypted_text)
 
     print("Decryption completed successfully")
+    
+
+
+# Verification Function
+def verify_files():
+
+    with open("raw_text.txt", "r") as file:
+        original = file.read()
+
+    with open("decrypted_text.txt", "r") as file:
+        decrypted = file.read()
+
+    if original == decrypted:
+        print("Verification Successful: Files Match")
+    else:
+        print("Verification Failed: Files Do Not Match")
+
+
 # Main Program
 def main():
 
