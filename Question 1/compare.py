@@ -5,6 +5,7 @@ def compare(raw_file, decrypt_file):
             raw = file1.read()
             decpt = file2.read()
 
+
         if len(raw) != len(decpt):
             print(f"There is a diiference in length of the files {raw_file} is {len(raw)} and {decrypt_file} is {len(decpt)}")
 
