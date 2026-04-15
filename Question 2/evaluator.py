@@ -1,5 +1,6 @@
 from scanner import tokenise
 from math_parser import parse
+from pathlib import Path
 
 def evaluate_file(input_path: str) -> list[dict]:
     """
@@ -31,8 +32,8 @@ def evaluate_file(input_path: str) -> list[dict]:
                 "result": "ERROR" if result is None else result})
 
     # Write resuls to output.txt 
-    # TODO: output file location should match input file
-    with open("output.txt", "w") as f:
+    output_path = Path(input_path).with_name("output.txt")
+    with open(output_path, "w") as f:
         for result in results:
             f.write(f"Input: {result['input']}\n")
             f.write(f"Tree: {result['tree']}\n")
