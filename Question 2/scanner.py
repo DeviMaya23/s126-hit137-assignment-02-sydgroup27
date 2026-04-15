@@ -2,8 +2,11 @@ import constants
 def tokenise(input_line:str) -> list[tuple[str, str]]:
     """
     Scans the input data and returns a list of tokens.
+
     Args:
     input_line: a string of input line, coming from input file.
+        Token types: NUM, OP, LPAREN, RPAREN, END
+        Must end with END token
 
     Return:
     [(token_type, token_value), ...]
