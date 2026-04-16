@@ -2,27 +2,36 @@
 from encryption import encrypt
 from decryption import decrypt
 from compare import compare
-def get_shift(prompt):
+
+
+def get_shift(prompt: str) -> int:
+    """
+    Prompts the user for a shift value and validates the input.
+
+    Args:
+        prompt: The message to display when asking for input
+    Returns:
+        The validated shift value as an integer.
+    """
     while True:
         try:
             value = int(input(prompt))
             return value
         except ValueError:
             print("Invalid input! Please enter a number only.")
+
+
 def main():
+    """
+    Entry point for question 1 script.
+    """
     try:
-        # Givin the shif value to shift the data 
+        # Giving the shift value to shift the data 
         shift1 = get_shift("Enter shift1 value:")
         shift2 = get_shift("Enter shift2 value:")
 
-
-        # creating the  file and inserting the text in the file 
-        # raw_text = input("Write the file content: ")
-
         # Writing the content to be encrypted in the file raw_text.txt
         with open("raw_text.txt", 'r') as file:
-            # file.write(raw_text)
-            # file.seek(0)
             raw_text = file.read()
         print("\n\n"+"Sentences have been saved to 'raw_text.txt'")
 
@@ -32,7 +41,7 @@ def main():
         # Writing the encrypted text in the file encrypt_text.txt
         with open("encrypt_text.txt", 'w+') as file:
             file.write(encrypt_text)
-            print("\n\n" + "Encrypted has been sucessfull.")
+            print("\n\n" + "Encrypted has been successful.")
             file.seek(0)
             enc_text = file.read()
 

@@ -4,6 +4,15 @@ from pathlib import Path
 import constants
 
 def format_token(token_list: list[tuple[str, str]]) -> str:
+    """
+    Formats a list of tokens into a string representation.
+
+    Args:
+        token_list: list of tokens from tokeniser
+    Returns:
+        A string representation of the token list, using [token_type:token_value] format for each token.
+        END token is represented as [END].
+    """
 
     parts = []
 
@@ -22,7 +31,7 @@ def evaluate_file(input_path: str) -> list[dict]:
     Args:
         input_path: path of the input file
     Returns:
-        A list of dictionaries containing input, tokens, tree and result for each line in the input
+        A list of dictionaries with keys "input", "token", "tree", "result". Values are "ERROR" for lines with errors.
     """
     results = []
 

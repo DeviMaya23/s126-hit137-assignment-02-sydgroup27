@@ -4,16 +4,12 @@ def tokenise(input_line:str) -> list[tuple[str, str]] | None:
     Scans the input data and returns a list of tokens.
 
     Args:
-    input_line: a string of input line, coming from input file.
-        Token types: NUM, OP, LPAREN, RPAREN, END
-        Must end with END token
-
-    Return:
-    [(token_type, token_value), ...]
-    If it's an empty line, return None.
-    
+        input_line: a string of input line, coming from input file.
+    Returns:
+        A list of tuples (token_type, token_value) where token_type is one of:
+        NUM, OP, LPAREN, RPAREN, or END. Returns None for empty lines.
     Raises:
-    ValueError: if an unexpected character is encountered or if a number literal is invalid.
+        ValueError: if an unexpected character is encountered or if a number literal is invalid.
     """
     
     if not input_line.strip():

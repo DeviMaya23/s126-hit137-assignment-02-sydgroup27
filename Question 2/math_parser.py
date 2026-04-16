@@ -116,7 +116,7 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
     Parses the input data and returns tree and result.
     
     Args:
-        token_list: List produced by the tokeniser. Must end with END token.
+        token_list: List of token tuples produced by tokenise(). Must end with END token.
     Returns:
         A tuple of (tree, result). Values are None for errors.
     """

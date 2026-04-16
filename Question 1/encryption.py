@@ -1,5 +1,15 @@
-# Function to encrypt the content
-def encrypt(text, shift1, shift2):
+def encrypt(text: str, shift1: int, shift2: int) -> str:
+    """
+    Encrypts the given text using a custom encryption algorithm.
+
+    Args:
+        text: The text to be encrypted
+        shift1: First shift value, from user input
+        shift2: Second shift value, from user input
+
+    Returns:
+        The encrypted text.
+    """
     encrypted = ""
     for char in text:
         ''' 
@@ -11,7 +21,7 @@ def encrypt(text, shift1, shift2):
         if char.isupper():
             if 'A' <= char <=  'M':
                 encrypted += chr((ord(char) - ord('A') - shift1) %13 + ord('A')) 
-            elif 'N' <= char <= 'z':
+            elif 'N' <= char <= 'Z':
                 shift = shift2 * shift2
                 encrypted += chr((ord(char) - ord('N') + shift) %13 + ord('N'))
         elif char.islower():
