@@ -1,6 +1,18 @@
 from scanner import tokenise
 from math_parser import parse
 from pathlib import Path
+import constants
+
+def format_token(token_list: list[tuple[str, str]]) -> str:
+
+    parts = []
+
+    for token_type, token_value in token_list:
+        if token_type == constants.END:
+            parts.append("[END]")
+        else:
+            parts.append(f"[{token_type}:{token_value}]")
+    return " ".join(parts)
 
 def evaluate_file(input_path: str) -> list[dict]:
     """
@@ -34,7 +46,7 @@ def evaluate_file(input_path: str) -> list[dict]:
 
             results.append({
                 "input": line.rstrip('\n'),
-                "token": tokens,
+                "token": format_token(tokens),
                 "tree": "ERROR" if tree is None else tree,
                 "result": "ERROR" if result is None else result})
             
