@@ -20,6 +20,9 @@ test_cases = [
     ("empty line", [("END", None)], None, None),
     ("unary minus only", [("OP", "-"), ("END", None)], None, None),
     ("+ 5", [("OP", "+"), ("NUM", "5"), ("END", None)], None, None),
+    # Others
+    ("2(3 + 4)", [("NUM", "2"), ("LPAREN", "("), ("NUM", "3"), ("OP", "+"), ("NUM", "4"), ("RPAREN", ")"), ("END", None)], "(* 2 (+ 3 4))", 14.0),
+    ("3(1 / 0)", [("NUM", "3"), ("LPAREN", "("), ("NUM", "1"), ("OP", "/"), ("NUM", "0"), ("RPAREN", ")"), ("END", None)], "(* 3 (/ 1 0))", None),
 ]
 
 @pytest.mark.parametrize("name, input, expected_tree, expected_value", test_cases,
