@@ -1,5 +1,13 @@
-# Function to compare the content of the two raw_text.txt and decryption_text.txt 
-def compare(raw_file, decrypt_file):
+def compare(raw_file: str, decrypt_file: str) -> None:
+    """
+    Compares the content of two files.
+
+    Args:
+        raw_file: Path to the raw file
+        decrypt_file: Path to the decrypted file
+    Returns:
+        None. Prints comparison results to console.
+    """
     try:
         with open(raw_file, 'r') as file1, open(decrypt_file, 'r') as file2:
             raw = file1.read()
