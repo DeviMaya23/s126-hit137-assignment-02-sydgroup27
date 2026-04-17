@@ -31,7 +31,7 @@ def evaluate_file(input_path: str) -> list[dict]:
     Args:
         input_path: path of the input file
     Returns:
-        A list of dictionaries with keys "input", "token", "tree", "result". Values are "ERROR" for lines with errors.
+        A list of dictionaries with keys "input", "tokens", "tree", "result". Values are "ERROR" for lines with errors.
     """
     results = []
 
@@ -45,7 +45,7 @@ def evaluate_file(input_path: str) -> list[dict]:
                 # Skip parsing, append error result
                 results.append({
                     "input": line.rstrip('\n'),
-                    "token": "ERROR",
+                    "tokens": "ERROR",
                     "tree": "ERROR",
                     "result": "ERROR"
                 })
@@ -55,7 +55,7 @@ def evaluate_file(input_path: str) -> list[dict]:
 
             results.append({
                 "input": line.rstrip('\n'),
-                "token": format_token(tokens),
+                "tokens": format_token(tokens),
                 "tree": "ERROR" if tree is None else tree,
                 "result": "ERROR" if result is None else result})
             
@@ -69,7 +69,7 @@ def evaluate_file(input_path: str) -> list[dict]:
         for result in results:
             f.write(f"Input: {result['input']}\n")
             f.write(f"Tree: {result['tree']}\n")
-            f.write(f"Tokens: {result['token']}\n")
+            f.write(f"Tokens: {result['tokens']}\n")
 
             result_value = result['result']
             if result_value != "ERROR":
