@@ -3,6 +3,7 @@ from math_parser import parse
 from pathlib import Path
 import constants
 
+
 def format_token(token_list: list[tuple[str, str]]) -> str:
     """
     Formats a list of tokens into a string representation.
@@ -10,8 +11,9 @@ def format_token(token_list: list[tuple[str, str]]) -> str:
     Args:
         token_list: list of tokens from tokeniser
     Returns:
-        A string representation of the token list, using [token_type:token_value] format for each token.
-        END token is represented as [END].
+        A string representation of the token list,
+            using [token_type:token_value] format for each token.
+            END token is represented as [END].
     """
 
     parts = []
@@ -23,15 +25,18 @@ def format_token(token_list: list[tuple[str, str]]) -> str:
             parts.append(f"[{token_type}:{token_value}]")
     return " ".join(parts)
 
+
 def evaluate_file(input_path: str) -> list[dict]:
     """
     Evaluates the input file and returns a list of results.
-    It also writes the results to output.txt, saved in the same directory as input file.
+    It also writes the results to output.txt, saved in the same
+    directory as input file.
 
     Args:
         input_path: path of the input file
     Returns:
-        A list of dictionaries with keys "input", "tokens", "tree", "result". Values are "ERROR" for lines with errors.
+        A list of dictionaries with keys "input", "tokens", "tree",
+            "result". Values are "ERROR" for lines with errors.
     """
     results = []
 
@@ -58,12 +63,12 @@ def evaluate_file(input_path: str) -> list[dict]:
                 "tokens": format_token(tokens),
                 "tree": "ERROR" if tree is None else tree,
                 "result": "ERROR" if result is None else result})
-            
+
     # For empty file, skip writing to output.txt
     if not results:
         return results
 
-    # Write resuls to output.txt 
+    # Write results to output.txt
     output_path = Path(input_path).with_name("output.txt")
     with open(output_path, "w") as f:
         for result in results:

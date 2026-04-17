@@ -25,8 +25,10 @@ test_cases = [
     ("3(1 / 0)", [("NUM", "3"), ("LPAREN", "("), ("NUM", "1"), ("OP", "/"), ("NUM", "0"), ("RPAREN", ")"), ("END", None)], "(* 3 (/ 1 0))", None),
 ]
 
-@pytest.mark.parametrize("name, input, expected_tree, expected_value", test_cases,
-                         ids=[case[0] for case in test_cases])
+
+@pytest.mark.parametrize(
+    "name, input, expected_tree, expected_value", test_cases,
+    ids=[case[0] for case in test_cases])
 def test_parser(name, input, expected_tree, expected_value):
     tree, value = parse(input)
     assert tree == expected_tree

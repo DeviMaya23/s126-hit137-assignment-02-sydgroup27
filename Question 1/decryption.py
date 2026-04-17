@@ -13,18 +13,26 @@ def decrypt(text: str, shift1: int, shift2: int) -> str:
     decrypted = ""
     for char in text:
         if char.isupper():
-            if 'A' <= char <=  'M':
-                decrypted += chr((ord(char) - ord('A') + shift1) %13 + ord('A')) 
+            if 'A' <= char <= 'M':
+                decrypted += chr(
+                    (ord(char) - ord('A') + shift1) % 13 + ord('A')
+                )
             elif 'N' <= char <= 'Z':
                 shift = shift2 * shift2
-                decrypted += chr((ord(char) - ord('N') - shift) %13 + ord('N'))
+                decrypted += chr(
+                    (ord(char) - ord('N') - shift) % 13 + ord('N')
+                )
         elif char.islower():
             if 'a' <= char <= 'm':
                 shift = shift1 * shift2
-                decrypted += chr((ord(char) - ord('a') - shift) %13 + ord('a'))
+                decrypted += chr(
+                    (ord(char) - ord('a') - shift) % 13 + ord('a')
+                )
             elif 'n' <= char <= 'z':
                 shift = shift1 + shift2
-                decrypted += chr((ord(char) - ord('n') + shift) %13 + ord('n'))
+                decrypted += chr(
+                    (ord(char) - ord('n') + shift) % 13 + ord('n')
+                )
         else:
             decrypted += char
     return decrypted

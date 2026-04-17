@@ -1,5 +1,3 @@
-
-import os
 from encryption import encrypt
 from decryption import decrypt
 from compare import compare
@@ -26,8 +24,8 @@ def main():
     """
     Entry point for question 1 script.
     """
-    
-    # Giving the shift value to shift the data 
+
+    # Receive the shift value to shift the data
     shift1 = get_shift("Enter shift1 value:")
     shift2 = get_shift("Enter shift2 value:")
 
@@ -62,7 +60,7 @@ def main():
     # Decrypting the content of the file 'encrypt_text.txt'.
     decrypt_text = decrypt(encrypt_text.strip(), shift1, shift2)
 
-    # writing the decrypted text in the file decryption_text.txt 
+    # writing the decrypted text in the file decryption_text.txt
     try:
         with open("decryption_text.txt", 'w') as file:
             file.write(decrypt_text)

@@ -2,14 +2,18 @@ import pytest
 import constants
 from scanner import tokenise
 
+
 # Helpers
 def tok(type_, value):
     """Shorthand for building an expected token tuple."""
     return (type_, value)
 
+
 END = (constants.END, None)
 
+
 # 1. Empty / blank input
+
 
 class TestBlankInput:
     def test_empty_string_returns_none(self):
@@ -26,6 +30,7 @@ class TestBlankInput:
 
 # 2. Always ends with END token
 
+
 class TestEndToken:
     def test_single_number_ends_with_end(self):
         result = tokenise("5")
@@ -36,6 +41,7 @@ class TestEndToken:
         assert result[-1] == END
 
 # 3. Number literals
+
 
 class TestNumbers:
     def test_single_digit(self):
@@ -62,6 +68,8 @@ class TestNumbers:
             tokenise("1.2.3")
 
 # 4. Operators
+
+
 
 class TestOperators:
     @pytest.mark.parametrize("op", ["+", "-", "*", "/"])
@@ -100,6 +108,7 @@ class TestOperators:
 
 # 5. Parentheses
 
+
 class TestParentheses:
     def test_lparen(self):
         result = tokenise("(1)")
@@ -122,6 +131,7 @@ class TestParentheses:
 
 # 6. Whitespace handling
 
+
 class TestWhitespace:
     def test_spaces_are_ignored(self):
         assert tokenise("3 + 5") == tokenise("3+5")
@@ -134,6 +144,7 @@ class TestWhitespace:
         assert tokenise("3\t+\t5") == tokenise("3+5")
 
 # 7. Full expressions
+
 
 class TestFullExpressions:
     def test_simple_addition(self):
@@ -208,6 +219,7 @@ class TestFullExpressions:
         ]
 
 # 8. Invalid / error inputs
+
 
 class TestInvalidInput:
     def test_unknown_character_raises_value_error(self):

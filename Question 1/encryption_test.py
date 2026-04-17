@@ -22,6 +22,7 @@ test_cases = [
     ("Hello World 1!", 3, 4, "Edkku Zuxkc 1!"),
 ]
 
+
 @pytest.mark.parametrize("input, shift1, shift2, expected", test_cases)
 def test_encrypt(input, shift1, shift2, expected):
     assert encrypt(input, shift1, shift2) == expected
