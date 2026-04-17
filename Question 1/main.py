@@ -1,4 +1,5 @@
 
+import os
 from encryption import encrypt
 from decryption import decrypt
 from compare import compare
@@ -25,52 +26,56 @@ def main():
     """
     Entry point for question 1 script.
     """
-    try:
-        # Giving the shift value to shift the data 
-        shift1 = get_shift("Enter shift1 value:")
-        shift2 = get_shift("Enter shift2 value:")
+    
+    # Giving the shift value to shift the data 
+    shift1 = get_shift("Enter shift1 value:")
+    shift2 = get_shift("Enter shift2 value:")
 
-        # Writing the content to be encrypted in the file raw_text.txt
+    try:
         with open("raw_text.txt", 'r') as file:
             raw_text = file.read()
-        print("\n\n"+"Sentences have been saved to 'raw_text.txt'")
+    except FileNotFoundError:
+        print("Error: raw_text.txt not found in current directory.")
+        return
+    except OSError as e:
+        print(f"Error reading file: {e}")
+        return
 
-        # Encrypting the content of the file using Encrypt function
-        encrypt_text = encrypt(raw_text, shift1, shift2)
+    # Encrypting the content of the file using Encrypt function
+    encrypt_text = encrypt(raw_text, shift1, shift2)
 
-        # Writing the encrypted text in the file encrypt_text.txt
-        with open("encrypt_text.txt", 'w+') as file:
+    # Writing the encrypted text in the file encrypt_text.txt
+    try:
+        with open("encrypt_text.txt", 'w') as file:
             file.write(encrypt_text)
-            print("\n\n" + "Encrypted has been successful.")
-            file.seek(0)
-            enc_text = file.read()
+    except OSError as e:
+        print(f"Error writing encrypted file: {e}")
+        return
 
-        print("\n\n"+ "The raw text are: " + "\n")
-        print(raw_text)
-        print("\n\n"+ "The Encrypted text are: " + "\n")
-        print(enc_text)
+    print("\n\nEncryption has been successful.")
 
-        # Decrypting the content of the file 'encrypt_text.txt'.
-        encrypted_line = enc_text.strip()
-        decrypt_text = decrypt(encrypted_line, shift1, shift2)
+    print("\n\nThe raw text are: \n")
+    print(raw_text)
+    print("\n\nThe Encrypted text are: \n")
+    print(encrypt_text)
 
-        # writing the decrypted text in the file Decryption_text.txt 
-        with open("Decryption_text.txt", 'w+') as file:
+    # Decrypting the content of the file 'encrypt_text.txt'.
+    decrypt_text = decrypt(encrypt_text.strip(), shift1, shift2)
+
+    # writing the decrypted text in the file decryption_text.txt 
+    try:
+        with open("decryption_text.txt", 'w') as file:
             file.write(decrypt_text)
-            file.seek(0)
-            decrypted_text = file.read()
+    except OSError as e:
+        print(f"Error writing decrypted file: {e}")
+        return
 
-        print("\n\n" + "The Decrypted text is: " + "\n")
-        print(decrypted_text)
-        print("\n\n")
+    print("\n\nThe Decrypted text is: \n")
+    print(decrypt_text)
+    print("\n\n")
 
-        # Comparison of the texts in the file raw_text.txt and Decryption_text.txt
-        file1 = "raw_text.txt"
-        file2 = "Decryption_text.txt"
-        compare(file1, file2)
+    compare("raw_text.txt", "decryption_text.txt")
 
-    except FileNotFoundError as e:
-        print("Error: {e}")
 
 if __name__ == "__main__":
     main()
