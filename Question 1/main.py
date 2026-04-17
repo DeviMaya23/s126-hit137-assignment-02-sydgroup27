@@ -35,6 +35,9 @@ def main():
     except FileNotFoundError:
         print("Error: raw_text.txt not found in current directory.")
         return
+    except UnicodeDecodeError:
+        print("Error: File raw_text.txt is not a valid text file.")
+        return
     except OSError as e:
         print(f"Error reading file: {e}")
         return
