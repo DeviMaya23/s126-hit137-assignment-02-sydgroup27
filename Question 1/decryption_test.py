@@ -21,6 +21,7 @@ test_cases = [
     ("Edkku Zuxkc 1!", 3, 4, "Hello World 1!"),
 ]
 
+
 @pytest.mark.parametrize("input, shift1, shift2, expected", test_cases)
 def test_decrypt(input, shift1, shift2, expected):
     assert decrypt(input, shift1, shift2) == expected

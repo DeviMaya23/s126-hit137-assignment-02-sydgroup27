@@ -1,7 +1,10 @@
 import constants
 import math
 
-def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
+
+def expression(
+        token_list: list[tuple[str, str]], index: int
+) -> tuple[float | None, str, int]:
     """
     Reads token list and returns an expression value, tree and next index.
 
@@ -14,7 +17,10 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | Non
     value, tree, last_index = term(token_list, index)
 
     # Consume all + and - tokens
-    while token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["+", "-"]:
+    while (
+        token_list[last_index][0] == constants.OP
+        and token_list[last_index][1] in ["+", "-"]
+    ):
         operator = token_list[last_index][1]
         right_term, right_tree, last_index = term(token_list, last_index + 1)
 
@@ -25,16 +31,18 @@ def expression(token_list:list[tuple[str, str]], index:int) -> tuple[float | Non
         if value is None or right_term is None:
             value = None
             continue
-        
+
         if operator == "+":
             value += right_term
         else:
             value -= right_term
-        
+
     return value, tree, last_index
 
 
-def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
+def term(
+        token_list: list[tuple[str, str]], index: int
+) -> tuple[float | None, str, int]:
     """
     Reads token list and returns a term value, tree and next index.
 
@@ -48,8 +56,10 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str
 
     # Consume all * and / tokens
     while (
-        ((token_list[last_index][0] == constants.OP and token_list[last_index][1] in ["*", "/"])
-        or token_list[last_index][0] == constants.LPAREN)
+        ((
+            token_list[last_index][0] == constants.OP
+            and token_list[last_index][1] in ["*", "/"])
+            or token_list[last_index][0] == constants.LPAREN)
     ):
         # For implicit multiplication
         if token_list[last_index][0] == constants.LPAREN:
@@ -79,7 +89,9 @@ def term(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str
     return value, tree, last_index
 
 
-def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, str, int]:
+def factor(
+    token_list: list[tuple[str, str]], index: int
+) -> tuple[float | None, str, int]:
     """
     Reads token list and returns a factor value, tree and next index.
 
@@ -95,7 +107,10 @@ def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, s
     if token[0] == constants.LPAREN:
         value, tree, last_index = expression(token_list, index + 1)
         if token_list[last_index][0] != constants.RPAREN:
-                raise SyntaxError(f"Expected RPAREN token at index {last_index}, got {token_list[last_index]}")
+            raise SyntaxError(
+                f"Expected RPAREN token at index {last_index}, "
+                f"got {token_list[last_index]}"
+            )
         return value, tree, last_index + 1
 
     # For negative unary
@@ -111,12 +126,15 @@ def factor(token_list:list[tuple[str, str]], index:int) -> tuple[float | None, s
     raise SyntaxError(f"Unexpected token: {token}")
 
 
-def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
+def parse(
+        token_list: list[tuple[str, str]]
+) -> tuple[str | None, float | None]:
     """
     Parses the input data and returns tree and result.
-    
+
     Args:
-        token_list: List of token tuples produced by tokenise(). Must end with END token.
+        token_list: List of token tuples produced by tokenise().
+            Must end with END token.
     Returns:
         A tuple of (tree, result). Values are None for errors.
     """
@@ -127,15 +145,17 @@ def parse(token_list:list[tuple[str, str]]) -> tuple[str | None, float | None]:
         if token_list[last_index][0] != constants.END:
             result = None
             tree = None
-            raise SyntaxError(f"Expected END token at index {last_index}, got {token_list[last_index]}")
+            raise SyntaxError(
+                f"Expected END token at index {last_index}, "
+                f"got {token_list[last_index]}"
+            )
     except SyntaxError:
-        # SyntaxError is raised for unexpected tokens. Return default values which is None.
+        # SyntaxError is raised for unexpected tokens, return None
         pass
-    
+
     # For potential overflow/nan cases
     if result is not None and not math.isfinite(result):
         print("Result is too large to calculate for token set: ", token_list)
         result = None
 
     return tree, result
-

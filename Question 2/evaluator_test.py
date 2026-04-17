@@ -30,12 +30,15 @@ format_token_test_cases = [
     ),
 ]
 
-@pytest.mark.parametrize("name, input, expected_formatted", format_token_test_cases,
-                         ids=[case[0] for case in format_token_test_cases])
+
+@pytest.mark.parametrize(
+    "name, input, expected_formatted", format_token_test_cases,
+    ids=[case[0] for case in format_token_test_cases]
+)
 def test_format_token(name, input, expected_formatted):
     formatted = format_token(input)
     assert formatted == expected_formatted
-  
+
 
 def test_evaluate_file_success(tmp_path):
 
@@ -47,11 +50,20 @@ def test_evaluate_file_success(tmp_path):
     result = evaluate_file(str(input_path))
 
     expected_result = [
-        {"input": "3 + 5", "tokens": "[NUM:3] [OP:+] [NUM:5] [END]", "tree": "(+ 3 5)", "result": 8.0},
-        {"input": "3 @ 5", "tokens": "ERROR", "tree": "ERROR", "result": "ERROR"},
+        {
+            "input": "3 + 5",
+            "tokens": "[NUM:3] [OP:+] [NUM:5] [END]",
+            "tree": "(+ 3 5)",
+            "result": 8.0},
+        {
+            "input": "3 @ 5",
+            "tokens": "ERROR",
+            "tree": "ERROR",
+            "result": "ERROR"
+        },
     ]
     assert result == expected_result
-    
+
     # File output assertions
     output_path = tmp_path / "output.txt"
     assert output_path.exists()
